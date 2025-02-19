@@ -1,5 +1,6 @@
 import pytest
 
+from data import DataTest
 from praktikum.bun import Bun
 from praktikum.burger import Burger
 from praktikum.database import Database
@@ -15,7 +16,7 @@ def database():
 
 @pytest.fixture
 def bun():
-    bun = Bun('Булка', 1.25)
+    bun = Bun(DataTest.TEST_BUN_NAME, DataTest.TEST_BUN_PRICE)
     return bun
 
 
@@ -27,7 +28,7 @@ def burger():
 
 @pytest.fixture
 def ingredient():
-    ingredient = Ingredient(INGREDIENT_TYPE_FILLING, 'Котлета', 5.50)
+    ingredient = Ingredient(DataTest.TEST_INGREDIENT_TYPE, DataTest.TEST_INGREDIENT_NAME, DataTest.TEST_INGREDIENT_PRICE)
     return ingredient
 
 

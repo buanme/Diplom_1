@@ -1,30 +1,30 @@
-from praktikum.ingredient import Ingredient
-from praktikum.ingredient_types import INGREDIENT_TYPE_SAUCE, INGREDIENT_TYPE_FILLING
+from data import DataTest
 
 
 class TestBurger:
 
+    def add_test_ingredients(self, burger):
+        for ingredient in DataTest.TEST_INGREDIENTS:
+            burger.add_ingredient(ingredient)
+
     def test_set_buns(self, burger, bun):
         burger.set_buns(bun)
-        assert burger.bun.get_name() == 'Булка' and burger.bun.get_price() == 1.25
+        assert burger.bun.get_name() == DataTest.TEST_BUN_NAME and burger.bun.get_price() == DataTest.TEST_BUN_PRICE
 
     def test_add_ingredients(self, burger):
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_SAUCE, "hot sauce", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "cutlet", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "sausage", 300))
-        assert len(burger.ingredients) == 3 and burger.ingredients[0].get_name() == "hot sauce" and burger.ingredients[1].get_type() == "FILLING" and burger.ingredients[2].get_price() == 300
+        self.add_test_ingredients(burger)
+        assert (len(burger.ingredients) == len(DataTest.TEST_INGREDIENTS) and
+               burger.ingredients[0].get_name() == DataTest.TEST_INGREDIENTS[0].get_name() and
+               burger.ingredients[1].get_type() == "FILLING" and
+               burger.ingredients[2].get_price() == DataTest.TEST_INGREDIENTS[2].get_price())
 
     def test_remove_ingredient(self, burger):
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_SAUCE, "hot sauce", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "cutlet", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "sausage", 300))
+        self.add_test_ingredients(burger)
         burger.remove_ingredient(1)
         assert len(burger.ingredients) == 2 and burger.ingredients[0].get_name() == "hot sauce" and burger.ingredients[1].get_name() == "sausage"
 
     def test_move_ingredient(self, burger):
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_SAUCE, "hot sauce", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "cutlet", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "sausage", 300))
+        self.add_test_ingredients(burger)
         burger.move_ingredient(2,0)
         assert burger.ingredients[0].get_name() == "sausage" and burger.ingredients[1].get_name() == "hot sauce"
 
@@ -39,14 +39,5 @@ class TestBurger:
 
     def test_get_receipt(self, burger, bun):
         burger.set_buns(bun)
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_SAUCE, "hot sauce", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "cutlet", 100))
-        burger.add_ingredient(Ingredient(INGREDIENT_TYPE_FILLING, "sausage", 300))
-        assert burger.get_receipt() == '''(==== Булка ====)
-= sauce hot sauce =
-= filling cutlet =
-= filling sausage =
-(==== Булка ====)
-
-Price: 502.5'''
-
+        self.add_test_ingredients(burger)
+        assert burger.get_receipt() == DataTest.EXPECTED_RECEIPT
